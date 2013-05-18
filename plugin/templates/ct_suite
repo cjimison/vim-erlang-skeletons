@@ -1,0 +1,76 @@
+%%%-------------------------------------------------------------------
+%%% @author $author
+%%% @copyright (C) $year, $company
+%%% @doc
+%%%
+%%% @end
+%%% Created : $fulldate
+%%%-------------------------------------------------------------------
+-module($basename).
+
+%% Test Includes
+-include_lib("common_test/include/ct.hrl").
+
+%% CT callbacks
+-export([all/0]).
+-export([groups/0]).
+-export([init_per_suite/1]).
+-export([end_per_suite/1]).
+-export([init_per_group/2]).
+-export([end_per_group/2]).
+-export([init_per_testcase/2]).
+-export([end_per_testcase/2]).
+
+%% testcases
+-export([first_tests/1]).
+
+%%%===================================================================
+%%% CT callbacks
+%%%===================================================================
+all() ->
+    [{group, GROUP_NAME}].
+
+groups() ->
+    BaseTests = 
+    [
+        first_tests
+    ],
+    %% Options:
+    %% shuffleparallel, sequence, 
+    %% {repeat, Times}, {repeat_until_any_fail, N}
+    %% {repeat_until_all_fail, N}
+    %% {repeat_until_any_succeed, N}
+    %% {repeat_until_all_succeed, N}
+    [{GROUP_NAME, [shuffle], BaseTests}].
+
+
+init_per_suite(Config) ->
+    SuiteData = {some_suite_key, some_suite_value},
+    [SuiteData | Config].
+
+end_per_suite(_Config) ->
+	ok.
+
+init_per_group(_GroupName, Config) ->
+    GroupData = {some_group_key, some_group_value},
+    [GroupData | Config].
+
+end_per_group(_GroupName, _Config) ->
+    ok.
+
+init_per_testcase(_CaseName, Config) ->
+    CaseData = {some_case_key, some_case_value},
+    [CaseData | Config].
+
+end_per_testcase(_CaseName, _Config) ->
+    ok.
+
+%%%===================================================================
+%%% Test functions
+%%%===================================================================
+first_tests(Config) ->
+    some_suite_value = proplists:get_value(some_suite_key, Config),
+    some_group_value = proplists:get_value(some_group_key, Config),
+    some_case_value = proplists:get_value(some_case_key, Config),
+    %% This should always fail.  Replace with test that will pass
+    ok = Config.
